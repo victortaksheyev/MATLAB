@@ -19,12 +19,13 @@ addpath '../igrf/'
 planet
 
 %%%Initial Conditions
-altitude = 600*1000; %%meters
+orbit_angle = 51.4;
+altitude = 400*1000; %%meters
 x0 = R + altitude;
 y0 = 0;
 z0 = 0; 
 xdot0 = 0;
-inclination = 56*pi/180;
+inclination = orbit_angle*pi/180;
 semi_major = norm([x0;y0;z0]);
 vcircular = sqrt(mu/semi_major);
 ydot0 = vcircular*cos(inclination);
@@ -86,23 +87,28 @@ zlabel('Z')
 grid on
 hold on
 surf(X,Y,Z,'EdgeColor','none')
+title(['Orbital Trajectory for ' num2str(orbit_angle) ' Inclination'])
 axis equal
 
 %%%Plot Magnetic Field
 fig2 = figure();
 set(fig2,'color','white')
-plot(tout,BxIout,'b-','LineWidth',2)
+plot(tout,BxIout/1000,'b-','LineWidth',2)
 hold on
 grid on
-plot(tout,ByIout,'y-','LineWidth',2)
-plot(tout,BzIout,'g-','LineWidth',2)
+plot(tout,ByIout/1000,'r-','LineWidth',2)
+plot(tout,BzIout/1000,'g-','LineWidth',2)
 xlabel('Time (sec)')
-ylabel('Mag Field (nT)')
+ylabel('Magnetic Field (\muT)')
+title(['Magnetic Field For One Orbital Period at ' num2str(orbit_angle) ' degrees'])
 legend('X','Y','Z')
 
 %%%And Norm
 Bnorm = sqrt(BxIout.^2 + ByIout.^2 + BzIout.^2);
 fig3 = figure();
 set(fig3,'color','white')
-plot(tout,Bnorm,'LineWidth',2)
+plot(tout,Bnorm/1000,'LineWidth',2)
+xlabel('Time (sec)')
+ylabel('Magnetic Field (\muT)')
+title('Normalized Magnetic Field Vector')
 grid on
